@@ -3,12 +3,13 @@ package com.akshay.shaadi.presentation.di
 import android.content.Context
 import androidx.room.Room
 import com.akshay.shaadi.data.ApiInterface
+import com.akshay.shaadi.data.database.AppDatabase
+import com.akshay.shaadi.data.repository.InternetConnectionChecker
 import com.akshay.shaadi.data.repository.Repository
 import com.akshay.shaadi.data.repository.RepositoryImplementation
 import com.akshay.shaadi.data.source.DataSource
 import com.akshay.shaadi.data.source.LocalDataSourceImpl
 import com.akshay.shaadi.data.source.RemoteDataSourceImpl
-import com.akshay.shaadi.data.database.AppDatabase
 import com.akshay.shaadi.domain.getmatches.GetMatchesUseCase
 import com.akshay.shaadi.presentation.view.home.MatchesActivity
 import dagger.Module
@@ -17,7 +18,6 @@ import dagger.android.ContributesAndroidInjector
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
-import javax.inject.Scope
 
 
 @Module
@@ -39,13 +39,15 @@ class ApiModule {
     fun getApiService(retrofit: Retrofit): ApiInterface = retrofit.create(ApiInterface::class.java)
 }
 
-@Module(includes = [DataSourceModule::class])
+@Module(includes = [DataSourceModule::class, UtilityModule::class])
 class RepositoryModule {
     @Provides
     fun provideRepository(
         localDataSource: DataSource.LocalDataSource,
-        remoteDataSource: DataSource.RemoteDataSource
-    ): Repository = RepositoryImplementation(localDataSource, remoteDataSource)
+        remoteDataSource: DataSource.RemoteDataSource,
+        internetConnectionChecker: InternetConnectionChecker
+    ): Repository =
+        RepositoryImplementation(localDataSource, remoteDataSource, internetConnectionChecker)
 }
 
 @Module(includes = [ApiModule::class, DataBaseModule::class])
@@ -85,6 +87,14 @@ class ContextModule() {
     @Provides
     @Named("ActivityContext")
     fun providesContext(context: Context): Context = context
+}
+
+@Module(includes = [ContextModule::class])
+class UtilityModule() {
+    @Provides
+    fun provideConnectionChecker(context: Context): InternetConnectionChecker {
+        return InternetConnectionChecker(context)
+    }
 }
 
 

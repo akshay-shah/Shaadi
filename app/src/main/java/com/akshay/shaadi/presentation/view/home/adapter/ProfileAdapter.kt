@@ -22,15 +22,16 @@ class ProfileAdapter() : RecyclerView.Adapter<ProfileAdapter.ViewHolder>() {
             )
         )
     }
+
     override fun getItemCount(): Int = list.size
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.textViewName.apply {
-            text = list[position].name
+            text = "Name : " + list[position].name
         }
         holder.textViewAge.apply {
-            text = " " + list[position].age
+            text = "Age : " + list[position].age
         }
         Glide.with(holder.itemView.context).load(list[position].imageUrl)
             .into(holder.imageViewProfilePic)

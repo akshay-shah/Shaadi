@@ -1,6 +1,5 @@
 package com.akshay.shaadi.data.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 
@@ -18,20 +17,23 @@ data class User(
 @Dao
 interface UserDao {
 
-    @get:Query("SELECT * FROM user")
-    val getAllUsers: LiveData<List<User>>
+    @Query("SELECT * FROM user")
+    suspend fun getAllUsers(): List<User>
 
     @Query("SELECT COUNT(*) from user")
-    fun countUsers(): Int
+    suspend fun countUsers(): Int
 
-    @Insert
-    fun insert(users: User)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(users: User)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllOrders(listUsers: List<User>)
 
     @Delete
-    fun delete(user: User)
+    suspend fun delete(user: User)
 }
 
-@Database(entities = [User::class], version = 1,exportSchema = false)
+@Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 }
