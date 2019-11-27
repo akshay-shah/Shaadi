@@ -1,4 +1,4 @@
-package com.akshay.shaadi.data.model.matchesmodel
+package com.akshay.shaadi.data.model
 
 data class Name(
     val first: String = "",

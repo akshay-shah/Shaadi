@@ -2,14 +2,14 @@ package com.akshay.shaadi.presentation.di
 
 import android.content.Context
 import androidx.room.Room
-import com.akshay.shaadi.data.ApiInterface
-import com.akshay.shaadi.data.database.AppDatabase
 import com.akshay.shaadi.data.repository.InternetConnectionChecker
 import com.akshay.shaadi.data.repository.Repository
 import com.akshay.shaadi.data.repository.RepositoryImplementation
 import com.akshay.shaadi.data.source.DataSource
-import com.akshay.shaadi.data.source.LocalDataSourceImpl
-import com.akshay.shaadi.data.source.RemoteDataSourceImpl
+import com.akshay.shaadi.data.source.localdatasource.LocalDataSourceImpl
+import com.akshay.shaadi.data.source.localdatasource.database.AppDatabase
+import com.akshay.shaadi.data.source.remotedatasource.ApiInterface
+import com.akshay.shaadi.data.source.remotedatasource.RemoteDataSourceImpl
 import com.akshay.shaadi.domain.getmatches.GetMatchesUseCase
 import com.akshay.shaadi.presentation.view.home.MatchesActivity
 import dagger.Module
@@ -36,7 +36,9 @@ class ApiModule {
         .build()
 
     @Provides
-    fun getApiService(retrofit: Retrofit): ApiInterface = retrofit.create(ApiInterface::class.java)
+    fun getApiService(retrofit: Retrofit): ApiInterface = retrofit.create(
+        ApiInterface::class.java
+    )
 }
 
 @Module(includes = [DataSourceModule::class, UtilityModule::class])

@@ -1,4 +1,4 @@
-package com.akshay.shaadi.data.database
+package com.akshay.shaadi.data.source.localdatasource.database
 
 import androidx.room.*
 
