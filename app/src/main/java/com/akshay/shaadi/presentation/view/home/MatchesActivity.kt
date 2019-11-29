@@ -29,11 +29,24 @@ class MatchesActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         init()
-        getMatchesApiCall()
+        mViewModel.getMatches().observe(this, Observer<List<Profile>> {
+            if (it.isNotEmpty()) {
+                profileAdapter.list = it
+                profileAdapter.notifyDataSetChanged()
+            } else {
+                Toast.makeText(this, "Error Loading Data", Toast.LENGTH_SHORT).show()
+            }
+        })
+        mViewModel.dataLoading.observe(this, Observer {
+            if (it) {
+                showProgressBar()
+            } else
+                hideProgressBar()
+        })
 
     }
 
-    private fun init(){
+    private fun init() {
         recyclerView = findViewById<RecyclerView>(R.id.recyclerViewMatches)
         progressBar = findViewById<ProgressBar>(R.id.progressBar)
         recyclerView.apply {
@@ -46,20 +59,6 @@ class MatchesActivity : DaggerAppCompatActivity() {
         ).get(
             MatchesActivityViewModel::class.java
         )
-    }
-
-    private fun getMatchesApiCall() {
-        showProgressBar()
-        mViewModel.getMatches().observe(this, Observer<List<Profile>> {
-            if (it.isNotEmpty()) {
-                hideProgressBar()
-                profileAdapter.list = it
-                profileAdapter.notifyDataSetChanged()
-            } else {
-                hideProgressBar()
-                Toast.makeText(this, "Error Loading Data", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 
     private fun showProgressBar() {

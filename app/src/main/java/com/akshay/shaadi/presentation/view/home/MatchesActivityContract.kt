@@ -4,6 +4,5 @@ import androidx.lifecycle.LiveData
 import com.akshay.shaadi.domain.getmatches.Profile
 
 interface MatchesActivityContract {
-    fun getMatches() : LiveData<List<Profile>>
-
+    fun getMatches(): LiveData<List<Profile>>
 }
