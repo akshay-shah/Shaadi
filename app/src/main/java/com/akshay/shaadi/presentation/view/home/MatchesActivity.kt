@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.akshay.shaadi.R
-import com.akshay.shaadi.data.repository.Repository
+import com.akshay.shaadi.domain.getmatches.GetMatchesUseCase
 import com.akshay.shaadi.domain.getmatches.Profile
 import com.akshay.shaadi.presentation.view.home.adapter.ProfileAdapter
 import dagger.android.support.DaggerAppCompatActivity
@@ -18,8 +18,9 @@ import javax.inject.Inject
 
 class MatchesActivity : DaggerAppCompatActivity() {
 
+
     @Inject
-    lateinit var repository: Repository
+    lateinit var getMatchesUseCase: GetMatchesUseCase
     private val profileAdapter: ProfileAdapter = ProfileAdapter()
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
@@ -55,7 +56,7 @@ class MatchesActivity : DaggerAppCompatActivity() {
         }
         mViewModel = ViewModelProvider(
             this,
-            MatchesActivityViewModelFactory(repository)
+            MatchesActivityViewModelFactory(getMatchesUseCase)
         ).get(
             MatchesActivityViewModel::class.java
         )

@@ -13,7 +13,7 @@ class RepositoryImplementation(
 
 
     override suspend fun getMatches(): GetMatchesUseCase.Response {
-        return if (internetConnectionChecker.checkConnectivity()!!) {
+        if (internetConnectionChecker.checkConnectivity()!!) {
             return when (val result = remoteDataSource.getMatches()) {
                 is Result.Success -> {
                     localDataSource.updateMatches(result.data)

@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import com.akshay.shaadi.data.repository.Repository
+import com.akshay.shaadi.domain.getmatches.GetMatchesUseCase
 import com.akshay.shaadi.domain.getmatches.Profile
 import javax.inject.Inject
 
-class MatchesActivityViewModel @Inject constructor(val repository: Repository) : ViewModel(),
+class MatchesActivityViewModel @Inject constructor(val useCase: GetMatchesUseCase) : ViewModel(),
     MatchesActivityContract {
 
     var dataLoading = MutableLiveData<Boolean>()
@@ -16,7 +16,7 @@ class MatchesActivityViewModel @Inject constructor(val repository: Repository) :
     override fun getMatches(): LiveData<List<Profile>> {
         dataLoading.value = true
         return liveData {
-            emit(repository.getMatches().list)
+            emit(useCase.executeUseCase(GetMatchesUseCase.Request()).list)
             dataLoading.value = false
         }
     }
